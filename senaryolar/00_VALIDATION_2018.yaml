@@ -1,0 +1,88 @@
+# =============================================================================
+# 00_VALIDATION_2018 — [ASILDI / DEPRECATED 2026-06-13]
+# =============================================================================
+# !!! BU DOSYA MAKALEDE KULLANILMIYOR. Yerine 00_VALIDATION_2023.yaml geçti. !!!
+#   Nedenler:
+#   (1) κ DEĞERİ ESKİ/YANLIŞ: aşağıda κ_loss=1.067 yazıyordu — bu değer ve
+#       "net çekiş kayıp-kaçak hariç" çerçevesi GEÇERSİZ (web denetimi 2026-06-11).
+#       Doğru 2018 değeri: κ_cal=1.0212 (TEDAŞ 2022 Tablo 7: brüt 304.17 − iç
+#       ihtiyaç 14.30 = 289.87 hedef / EPİAŞ ham 283.85). Tanım: şebekeye verilen
+#       enerji = brüt − iç ihtiyaç (iletim-düzeyi model hedefi).
+#   (2) IZOLASYON YOK: run.name='' paylaşılan resources/ kullanır → 2023 koşumunda
+#       bu yaklaşım KUTSAL demand_profiles.csv'yi ezme felaketine yol açtı. 2023
+#       validation run.name='validation2023' ile izole çalışır.
+#   2018 doğrulaması yine de istenirse: 00_VALIDATION_2023.yaml'ı 2018'e uyarlayıp
+#   (cutout-2018, custom_powerplants_2018.csv, κ_cal 1.0212, run.name=validation2018)
+#   çalıştır — bu eski dosyayı OLDUĞU GİBİ koşma.
+#
+# --- (tarihsel, ESKİ tasarım — referans için korunuyor) ---
+# AMAÇ: 2018 hava + 2018 talep + 2018 FİLO (üçü de tutarlı).
+#   - custom_powerplants_2018.csv, 88.4 GW, Akkuyu YOK.
+#   - cutout-2018-era5 → RES profilleri 2018 hava yılı.
+#   - demand_profiles.csv → EPİAŞ 2018 overwrite (ESKİ: κ_loss=1.067; DOĞRU: κ_cal=1.0212).
+#   - Doğrulama referansı: EPİAŞ generation_2018.parquet.
+# =============================================================================
+
+run:
+  name: ''
+  shared_cutouts: true
+
+scenario:
+  simpl:
+  - ''
+  ll:
+  - copt
+  clusters:
+  - 7                        # 7-bölge doğrulama testi
+  opts:
+  - ''                       # CO2 cap YOK, CCL YOK — gerçek dispatch, saf merit-order
+  planning_horizons:
+  - 2030                     # GEGIS spatial-template yolu için (talep gerçek 2018 overwrite)
+
+snapshots:
+  start: '2018-01-01'        # hava yılı 2018 cutout ile tutarlı
+  end: '2018-12-31'          # mevcut 2018 resources (cutout+demand=8736h) ile uyumlu
+  inclusive: left
+
+countries:
+- TR
+
+load_options:
+  ssp: ssp2-2.6
+  weather_year: 2018
+  prediction_year: 2030      # SADECE GEGIS spatial-template yolu (data/ssp2-2.6/2030/era5_2018);
+                             # gerçek değerler EPİAŞ 2018 overwrite'tan gelir.
+  scale: 1.0                 # gerçek 2018 talep, ölçekleme YOK
+
+co2_budget:
+  enable: false              # CO2 bütçesi serbest
+
+electricity:
+  voltages:
+  - 154.0
+  - 220.0
+  - 380.0
+  co2base: 1.49e8
+  custom_powerplants: replace        # EPDK 2018 gerçek filo (replace)
+  extendable_carriers:               # GENİŞLEME YOK — sabit 2018 filo (hepsi boş)
+    Generator: []
+    StorageUnit: []
+    Store: []
+    Link: []
+  conventional_carriers:
+  - oil
+  - OCGT
+  - CCGT
+  - coal
+  - lignite
+  - geothermal
+  - biomass
+  renewable_carriers:
+  - solar
+  - onwind
+  - offwind-ac
+  - offwind-dc
+  - hydro
+  estimate_renewable_capacities:
+    enable: false                    # gerçek 2018 filo kullan, IRENA tahmini ekleme
+    stats: false                     # IRENA istatistik enjeksiyonunu kapat

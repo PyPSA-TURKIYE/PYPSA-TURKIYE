@@ -1,0 +1,121 @@
+# SPDX-FileCopyrightText:  PyPSA-Earth and PyPSA-Eur Authors
+#
+# SPDX-License-Identifier: CC0-1.0
+
+# Byte-compiled / optimized / DLL files
+**/__pycache__
+*.py[cod]
+*$py.class
+
+# Jupyter-related files
+.ipynb_checkpoints
+
+# General untracked file formats
+*.idea
+*.log
+**/pbf
+*.pbf
+*.zip
+*.png
+*.done
+*.tif
+*.csv
+*.geojson
+*.nc
+*.xls
+*.xlsx
+*.org
+*~
+
+# Specific untracked files
+config.yaml
+dag.svg
+gurobi.log
+gadm_shapes.geojson
+doc/*.vscode/settings.json
+
+# Untracked folders (and files within)
+bak
+benchmarks/
+backup*
+cutouts/
+data/
+dask-worker-space/
+img/
+logs/
+networks/
+notebooks
+notebooks/
+pypsa/
+resources/
+results/
+.snakemake/
+slurm
+scripts/old
+.tmp
+doc/_build
+sample_pypsa_eur
+test/tmp/
+playground/
+
+# Specific configuration files
+configs/scenarios/config.*.yaml
+!configs/scenarios/config.NG.yaml
+
+# API keys and secrets
+.cdsapirc
+.env
+*.key
+
+# VS Code-related files
+.vscode
+*.code-workspace
+*.vscode/settings.json
+
+# Additional debugging folders
+backup*
+screenlog*
+
+# Exclude specific file paths
+!data/demand/unsd/paths/Energy_Statistics_Database.xlsx
+site/
+doc/img/gen_*.svg
+
+# --- PyPSA-Türkiye additions -------------------------------------------------
+# Note: the Turkish configuration is shipped as config.turkey.yaml;
+# copy it to config.yaml (ignored above) before running the workflow.
+
+# Local working notes (not part of the repository)
+proje-bellek/
+manuscript/
+
+# Pipeline outputs, inputs and local snapshots (large, regenerated or downloaded)
+results/
+resources/
+networks/
+cutouts/
+logs/
+yedek/
+SONUC_*/
+
+# Backups and temporary files
+*.bak
+*.bak.*
+*.orig
+senaryolar_bak_*/
+.mtimes_synced
+*.z01
+*.z02
+
+# Credentials and licences (never commit)
+gurobi.lic
+*.gurobi.lic
+*.lic
+.gurobi/
+.env
+.cdsapirc
+*.pem
+
+# Private container images that embed credentials
+Dockerfile.full
+Dockerfile.migrate

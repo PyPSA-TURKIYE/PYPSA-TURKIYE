@@ -1,0 +1,9 @@
+# Optional solver override: use the open-source HiGHS solver instead of Gurobi.
+# Pass it after the scenario file, e.g.
+#   snakemake -j1 --configfile senaryolar/n7/01_REF.yaml --configfile senaryolar/solver_highs.yaml -- <target>
+# Results agree closely with Gurobi but are not bit-identical (alternative optima);
+# 50- and 81-node cases are slow with HiGHS.
+solving:
+  solver:
+    name: highs
+    options: highs-default

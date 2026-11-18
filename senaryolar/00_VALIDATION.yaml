@@ -1,0 +1,88 @@
+# =============================================================================
+# 00_VALIDATION — Model doğrulama (backcasting) senaryosu
+# =============================================================================
+# AMAÇ: Capacity-expansion DEĞİL. Gerçek kurulu güç (sabit filo, genişleme YOK)
+#       + gerçek talep → model dispatch'i gerçek EPİAŞ üretimine ne kadar yakın?
+#       (PyPSA-Korea Tablo A1 mantığı: carrier bazında simüle vs gerçek % hata)
+#
+# HAVA YILI / TALEP YILI KARARI (ÖNEMLİ):
+#   - Tek mevcut cutout: cutout-2018-era5  → RES profilleri 2018 hava yılı.
+#   - 2023 cutout YOK. RES profilini 2023 hava yılıyla üretemeyiz.
+#   [ASILDI: 00_VALIDATION_2023.yaml kullanılıyor] hava 2018 + talep 2018 (EPİAŞ × κ_cal)
+#     + doğrulama referansı EPİAŞ generation_2018. Böylece hava ve talep aynı yıl.
+#   - 2023 talebini 2018 hava profiline bindirmek RES/dispatch uyumsuzluğu yaratırdı;
+#     bu nedenle iç tutarlılık için 2018 seçildi. Sınırlama makalede belgelenir.
+#   - snapshots = config.yaml ile aynı (2018-01-01 → 2018-12-31, left-inclusive, 8736 saat).
+#   - demand_profiles.csv EPİAŞ 2018 (DOĞRU κ_cal=1.0212; ESKİ 1.067 GEÇERSİZ) ile overwrite.
+# =============================================================================
+
+# NOT: run.name kullanılmıyor — namespace tüm resources/'ı (cutout, RES profil)
+#      yeniden kurmaya zorlardı (pahalı + DAG yeniden tetiklenir). Bunun yerine
+#      mevcut paylaşılan resources/ tekrar kullanılır; çözümden sonra çıktı
+#      elec_s_7_VALIDATION.nc olarak mv edilir. REF (elec_s_50_REF_*) zaten ayrı
+#      cluster+isim olduğu için EZİLMEZ.
+run:
+  name: ''
+  shared_cutouts: true
+
+scenario:
+  simpl:
+  - ''
+  ll:
+  - copt
+  clusters:
+  - 7                        # 7-bölge doğrulama testi
+  opts:
+  - ''                       # CO2 cap YOK, CCL YOK — gerçek dispatch'i bozma; saf merit-order
+  planning_horizons:
+  - 2023                     # hedef yıl 2023 (filo eşiği): DateIn>2023 santraller dışlanır (Akkuyu 2026 → çıkar)
+
+snapshots:
+  start: '2018-01-01'        # hava yılı 2018 cutout ile tutarlı
+  end: '2018-12-31'
+  inclusive: left
+
+countries:
+- TR
+
+load_options:
+  ssp: ssp2-2.6
+  weather_year: 2018
+  prediction_year: 2030      # SADECE GEGIS spatial-template yolu için (data/ssp2-2.6/2030/era5_2018);
+                             # GEGIS yalnızca bus dağılım şablonu — gerçek değerler EPİAŞ 2018 overwrite'tan gelir.
+                             # (GEGIS verisi yalnız pred_year>=2030 için mevcut; bu yüzden 2018 kullanılamaz.)
+  scale: 1.0                 # gerçek talep, ölçekleme YOK — bu validation
+
+co2_budget:
+  enable: false              # CO2 bütçesi serbest
+
+electricity:
+  voltages:
+  - 154.0
+  - 220.0
+  - 380.0
+  co2base: 1.49e8
+  custom_powerplants: replace        # EPDK gerçek filo (replace)
+  extendable_carriers:               # GENİŞLEME YOK — sabit filo (hepsi boş)
+    Generator: []
+    StorageUnit: []
+    Store: []
+    Link: []
+  conventional_carriers:
+  - nuclear
+  - oil
+  - OCGT
+  - CCGT
+  - coal
+  - lignite
+  - geothermal
+  - biomass
+  renewable_carriers:
+  - solar
+  - onwind
+  - offwind-ac
+  - offwind-dc
+  - hydro
+  estimate_renewable_capacities:
+    enable: false                    # gerçek filo kullan, IRENA tahmini ekleme
+    stats: false                     # IRENA istatistik enjeksiyonunu kapat (fonksiyon erken döner)

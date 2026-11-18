@@ -1,0 +1,248 @@
+# =============================================================================
+# 00_VALIDATION_2023 — TUTARLI 2023 model doğrulama (backcasting)
+# =============================================================================
+# AMAÇ: 2023 hava + 2023 talep + 2023 FİLO (üçü de tutarlı).
+#   - 2023 yılı Q1 makale omurgası için temel validation.
+#   - data/custom_powerplants.csv build öncesi 2023 filosuyla
+#     (custom_powerplants_2023.csv, 106.7 GW, Akkuyu YOK)
+#     değiştirilir; çözüm sonrası 2026 filosu geri yüklenir.
+#
+# TUTARLILIK:
+#   - cutout-2023-era5 → RES profilleri 2023 hava yılı.
+#   - demand_profiles.csv → EPİAŞ 2023 (κ_cal=1.0347, TEDAŞ 2024 Tablo 5) overwrite.
+#   - custom_powerplants → EPDK 2023 Aralık raporu kaynak bazında MW.
+#   - Doğrulama referansı: EPİAŞ generation_2023.parquet.
+#
+# KAYNAK:
+#   - EPDK 2023 Aralık: Tablo 6 (lisanslı) + Tablo 12 (lisanssız)
+#   - Toplam: 106.668 GW, Nuclear = 0 (Akkuyu 2023'te faaliyete geçmedi)
+#
+# NOT: run.name='validation2023' — Snakefile RDIR namespacing ile tüm çıktılar
+#      resources/validation2023/, networks/validation2023/, results/validation2023/
+#      altına İZOLE yazılır. Ana 2018 pipeline'a (resources/demand_profiles.csv,
+#      networks/base.nc, resources/renewable_profiles/) ASLA dokunulmaz.
+#      Cutout'lar shared (shared_cutouts: true → cutouts/cutout-2023-era5.nc).
+# =============================================================================
+# =============================================================================
+# 2023 KALİBRASYONU (resmi kaynaklı) — add_electricity.attach_conventional_generators
+# satır 668-685: conventional_config[carrier][attr] → n.generators.loc[idx, attr] = val
+# (statik kolon set; p_max_pu ve marginal_cost ikisi de generator statik kolonu).
+# Clustering aggregation: p_max_pu=capacity_weighted_average, marginal_cost=mean
+# (config.yaml:93-104) → değerler 7-node'a bozulmadan taşınır.
+# NOT: 2023'te nükleer yok (Akkuyu faaliyette değil) → nuclear satırı gereksiz;
+# config.yaml'dan miras kalan conventional.nuclear.p_min_pu=0.9 no-op (idx boş).
+# =============================================================================
+# 2023 yakıt fiyatları (€/MWh_th) — process_cost_data.py:358-364 'fuel' overwrite,
+# ardından 373-374 OCGT/CCGT.fuel = gas.fuel kopyası, 376'da
+# marginal_cost = VOM + fuel/efficiency yeniden hesaplanır (sıralama doğru).
+# Snakemake configfile merge recursive → config.yaml costs bloğunun kalanı korunur.
+# Atlite 2023 cutout override
+# Renewable profilleri 2023 cutout'tan üret
+# hydro_inflow_calibration: barajlı-only inflow x1.7146 (TEİAŞ 2023 barajlı 44.16 TWh / 0.90 eff / 28.618 TWh model inflow)
+run:
+  name: validation2023
+  shared_cutouts: true
+enable:
+  build_cutout: false
+scenario:
+  simpl:
+  - ''
+  ll:
+  - v1.0
+  clusters:
+  - 7
+  opts:
+  - ''
+  planning_horizons:
+  - 2030
+snapshots:
+  start: '2023-01-01'
+  end: '2024-01-01'
+  inclusive: left
+countries:
+- TR
+load_options:
+  ssp: ssp2-2.6
+  weather_year: 2023
+  prediction_year: 2030
+  scale: 1.0
+co2_budget:
+  enable: false
+electricity:
+  voltages:
+  - 154.0
+  - 220.0
+  - 380.0
+  co2base: 1.49e8
+  custom_powerplants: replace
+  extendable_carriers:
+    Generator: []
+    StorageUnit: []
+    Store: []
+    Link: []
+  conventional_carriers:
+  - oil
+  - OCGT
+  - CCGT
+  - coal
+  - lignite
+  - geothermal
+  - biomass
+  renewable_carriers:
+  - solar
+  - onwind
+  - offwind-ac
+  - offwind-dc
+  - hydro
+  estimate_renewable_capacities:
+    enable: false
+    stats: false
+conventional:
+  lignite:
+    p_max_pu: 0.53
+  coal:
+    p_max_pu: 0.85
+  geothermal:
+    p_max_pu: 0.7
+    marginal_cost: 0
+  biomass:
+    p_max_pu: 0.5
+    marginal_cost: 0
+costs:
+  fuel:
+    gas: 45.0
+    coal: 15.0
+    lignite: 15.0
+atlite:
+  nprocesses: 1
+  default: cutout-2023-era5
+  cutouts:
+    cutout-2023-era5:
+      module: era5
+      dx: 0.3
+      dy: 0.3
+renewable:
+  onwind:
+    cutout: cutout-2023-era5
+    resource:
+      method: wind
+      turbine: Vestas_V112_3MW
+    capacity_per_sqkm: 3
+    copernicus:
+      grid_codes:
+      - 20
+      - 30
+      - 40
+      - 60
+      - 100
+      - 111
+      - 112
+      - 113
+      - 114
+      - 115
+      - 116
+      - 121
+      - 122
+      - 123
+      - 124
+      - 125
+      - 126
+      distance: 1000
+      distance_grid_codes:
+      - 50
+    natura: true
+    potential: simple
+    clip_p_max_pu: 0.01
+    extendable: true
+  offwind-ac:
+    cutout: cutout-2023-era5
+    resource:
+      method: wind
+      turbine: NREL_ReferenceTurbine_5MW_offshore
+    capacity_per_sqkm: 2
+    copernicus:
+      grid_codes:
+      - 80
+      - 200
+    natura: true
+    max_depth: 50
+    max_shore_distance: 30000
+    potential: simple
+    clip_p_max_pu: 0.01
+    extendable: true
+  offwind-dc:
+    cutout: cutout-2023-era5
+    resource:
+      method: wind
+      turbine: NREL_ReferenceTurbine_5MW_offshore
+    capacity_per_sqkm: 3
+    copernicus:
+      grid_codes:
+      - 80
+      - 200
+    natura: true
+    max_depth: 50
+    min_shore_distance: 30000
+    potential: simple
+    clip_p_max_pu: 0.01
+    extendable: true
+  solar:
+    cutout: cutout-2023-era5
+    resource:
+      method: pv
+      panel: CSi
+      orientation: latitude_optimal
+    capacity_per_sqkm: 4.6
+    correction_factor: 0.854337
+    copernicus:
+      grid_codes:
+      - 20
+      - 30
+      - 40
+      - 50
+      - 60
+      - 90
+      - 100
+    natura: true
+    potential: simple
+    clip_p_max_pu: 0.01
+    extendable: true
+  hydro:
+    cutout: cutout-2023-era5
+    hydrobasins_level: 6
+    resource:
+      method: hydro
+      hydrobasins: data/hydrobasins/hybas_world.shp
+      flowspeed: 1.0
+    carriers:
+    - ror
+    - PHS
+    - hydro
+    PHS_max_hours: 6
+    hydro_max_hours: energy_capacity_totals_by_country
+    hydro_max_hours_default: 6.0
+    clip_min_inflow: 1.0
+    extendable: true
+    normalization:
+      method: eia
+      year: 2023
+    multiplier: 1.1
+    hydro_inflow_calibration: 1.7146
+  csp:
+    cutout: cutout-2023-era5
+    resource:
+      method: csp
+      installation: SAM_solar_tower
+    capacity_per_sqkm: 2.392
+    copernicus:
+      grid_codes:
+      - 20
+      - 30
+      - 40
+      - 60
+      - 90
+      distancing_codes:
+      - 50
+      distance_to_codes: 3000
+    natura: true
+    potential: simple

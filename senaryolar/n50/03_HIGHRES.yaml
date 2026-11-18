@@ -1,0 +1,108 @@
+# PyPSA-Türkiye temiz akış config — 03_HIGHRES @ 50 node
+# Üretim: 2026-06-08, kaynak: senaryolar/03_HIGHRES.yaml
+# opts: Co2L-CCL | clusters: 50 | tam zincir rebuild (-R add_electricity) ile çözülmeli
+# snapshots=2018 (hava+talep yılı); hedef yıl scale+planning_horizons ile
+# CCL tavan dosyası: data/agg_p_nom_minmax_accel.csv (EPDK gözlenen kurulum hızı kalibrasyonu)
+# scale 1.4938 (2026-06-12): 2030 hedef TUEP 455 TWh BRÜT × 0.95166 (2023 şebekeye-verilen/brüt oranı, TEDAŞ 2024 Tablo 5) = 433.0 TWh iletim-düzeyi;
+#   2018 baz 289.87 TWh = TEDAŞ 2022 Tablo 7 (brüt 304.17 − iç ihtiyaç 14.30 GWh·10³); κ_cal2018 = 289.87/283.85 (EPİAŞ ham) = 1.0212
+scenario:
+  simpl:
+  - ''
+  ll:
+  - copt
+  clusters:
+  - 50
+  opts:
+  - Co2L-CCL
+  planning_horizons:
+  - 2030
+snapshots:
+  start: '2018-01-01'
+  end: '2018-12-31'
+  inclusive: left
+countries:
+- TR
+load_options:
+  ssp: ssp2-2.6
+  weather_year: 2018
+  prediction_year: 2030
+  scale: 1.4938
+co2_budget:
+  enable: false
+electricity:
+  voltages:
+  - 154.0
+  - 220.0
+  - 380.0
+  co2limit: 7.5e7
+  co2base: 1.49e8
+  custom_powerplants: replace
+  extendable_carriers:
+    Generator:
+    - solar
+    - onwind
+    - offwind-ac
+    - offwind-dc
+    - geothermal
+    - biomass
+    StorageUnit:
+    - battery
+    Store:
+    - H2
+    Link: []
+  conventional_carriers:
+  - nuclear
+  - oil
+  - OCGT
+  - CCGT
+  - coal
+  - lignite
+  - geothermal
+  - biomass
+  renewable_carriers:
+  - solar
+  - onwind
+  - offwind-ac
+  - offwind-dc
+  - hydro
+  estimate_renewable_capacities:
+    enable: false
+    stats: false
+    year: 2023
+  agg_p_nom_limits:
+    file: data/agg_p_nom_minmax_accel.csv
+    agg_offwind: false
+    include_existing: false
+renewable:
+  hydro:
+    # 2018 hava-yılı bias düzeltmesi (gelecek senaryoları için weather-year kalibrasyonu;
+    # SADECE barajlı StorageUnit inflow'unu ölçekler, ror'a dokunmaz — add_electricity.py):
+    # TEİAŞ 2018 barajlı ≈41.04 TWh (EPİAŞ 2018 kırılımı barajlı 40.89/toplam 59.72 × TEİAŞ toplam 59.94)
+    # / 0.90 türbin verimi / model Reservoir inflow 26.714 TWh (profile_hydro.nc, 56 santral) = 1.7069
+    hydro_inflow_calibration: 1.7069
+
+# --- PyPSA-TR 2026-10-15: 2023 doğrulamasındaki kalibrasyon senaryolara taşındı ---
+# Kullanılabilirlik (p_max_pu) 00_VALIDATION_2023.yaml ile aynı (yakıt fiyatları AYNI DEĞİL: data/costs.csv varsayılanı, en alttaki nota bakın);
+# nükleer yıllık kullanılabilirlik 0.92 (config.yaml p_min_pu 0.9 korunur).
+conventional:
+  lignite:
+    p_max_pu: 0.53
+  coal:
+    p_max_pu: 0.85
+  geothermal:
+    p_max_pu: 0.7
+    marginal_cost: 0
+  biomass:
+    p_max_pu: 0.5
+    marginal_cost: 0
+  nuclear:
+    p_max_pu: 0.92
+# NOTE (2026-11-08): the block below was NOT applied to the published runs, so it is
+# commented out to match what was actually solved. Scenarios use the default cost
+# database fuel prices (data/costs.csv: gas 21.6, coal 8.4, lignite 2.9 EUR/MWh_th).
+# The 45/15/15 fuel prices are used only in the 2023 backcast (00_VALIDATION_2023.yaml).
+# costs:
+#   fuel:
+#     gas: 45.0
+#     coal: 15.0
+#     lignite: 15.0

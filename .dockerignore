@@ -1,0 +1,15 @@
+# SPDX-FileCopyrightText: PyPSA-Türkiye Authors
+#
+# SPDX-License-Identifier: CC0-1.0
+.git
+gurobi.lic
+*.lic
+.env
+.cdsapirc
+results/
+resources/
+networks/
+cutouts/
+logs/
+yedek/
+.snakemake/

@@ -1,0 +1,82 @@
+# SPDX-FileCopyrightText: 2026 The PyPSA-Türkiye Authors
+#
+# SPDX-License-Identifier: CC0-1.0
+
+cff-version: 1.2.0
+message: "If you use PyPSA-Türkiye, please cite the paper below and the PyPSA-Earth and PyPSA references."
+title: "PyPSA-Türkiye: an open-source energy system model of the Turkish power system"
+abstract: >-
+  PyPSA-Türkiye is an open-source, network-resolved energy system model of the
+  Turkish power system that co-optimizes generation, storage and transmission
+  investment with hourly operation. It is a fork of PyPSA-Earth and provides
+  configurations for 7, 22, 50 and 81 clustered nodes, five policy scenarios and
+  a 2023 dispatch backcast.
+type: software
+version: 1.0.0
+date-released: "2026-11-18"
+license: AGPL-3.0-or-later
+repository-code: "https://github.com/PyPSA-TURKIYE/PYPSA-TURKIYE"
+keywords:
+  - energy system modelling
+  - PyPSA
+  - PyPSA-Earth
+  - capacity expansion
+  - transmission expansion
+  - Türkiye
+authors:
+  - family-names: "Kıraç"
+    given-names: "Abdurrahman"
+    orcid: "https://orcid.org/0009-0003-2843-5946"
+    affiliation: "Department of Energy Systems Engineering, Erciyes University"
+  - family-names: "Selçuklu"
+    given-names: "Saltuk Buğra"
+    orcid: "https://orcid.org/0000-0002-9295-3866"
+    affiliation: "Department of Energy Systems Engineering, Erciyes University"
+    email: "sbselcuklu@erciyes.edu.tr"
+preferred-citation:
+  type: article
+  title: "PyPSA-Türkiye: An open-source energy system model for planning Türkiye's sustainable energy transition"
+  authors:
+    - family-names: "Kıraç"
+      given-names: "Abdurrahman"
+      orcid: "https://orcid.org/0009-0003-2843-5946"
+    - family-names: "Selçuklu"
+      given-names: "Saltuk Buğra"
+      orcid: "https://orcid.org/0000-0002-9295-3866"
+  journal: "Applied Energy"
+  year: 2026
+  status: submitted
+references:
+  - type: article
+    title: "PyPSA-Earth. A new global open energy system optimization model demonstrated in Africa"
+    authors:
+      - family-names: "Parzen"
+        given-names: "Maximilian"
+      - name: "et al."
+    journal: "Applied Energy"
+    volume: 341
+    start: 121096
+    year: 2023
+    doi: "10.1016/j.apenergy.2023.121096"
+  - type: article
+    title: "PyPSA: Python for Power System Analysis"
+    authors:
+      - family-names: "Brown"
+        given-names: "Tom"
+      - family-names: "Hörsch"
+        given-names: "Jonas"
+      - family-names: "Schlachtberger"
+        given-names: "David"
+    journal: "Journal of Open Research Software"
+    volume: 6
+    issue: 1
+    start: 4
+    year: 2018
+    doi: "10.5334/jors.188"
+  - type: software
+    title: "PyPSA-Earth"
+    authors:
+      - name: "The PyPSA-Earth and PyPSA-Eur Authors"
+    repository-code: "https://github.com/pypsa-meets-earth/pypsa-earth"
+    license: AGPL-3.0-or-later
+    version: "0.8.0"

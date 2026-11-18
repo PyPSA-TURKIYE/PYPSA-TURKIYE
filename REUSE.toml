@@ -1,0 +1,85 @@
+# SPDX-FileCopyrightText:  PyPSA-Earth and PyPSA-Eur Authors
+#
+# SPDX-License-Identifier: AGPL-3.0-or-later
+
+version = 1
+SPDX-PackageName = "PyPSA-Türkiye"
+SPDX-PackageSupplier = "The PyPSA-Türkiye Authors <sbselcuklu@erciyes.edu.tr>"
+SPDX-PackageDownloadLocation = "https://github.com/PyPSA-TURKIYE/PYPSA-TURKIYE"
+# PyPSA-Türkiye is a fork of PyPSA-Earth (https://github.com/pypsa-meets-earth/pypsa-earth),
+# upstream supplier: The PyPSA-Earth and PyPSA-Eur Authors <pypsameetsearth@gmail.com>.
+
+[[annotations]]
+path = "doc/data.csv"
+precedence = "aggregate"
+SPDX-FileCopyrightText = "The PyPSA-Earth and PyPSA-Eur Authors"
+SPDX-License-Identifier = "CC-BY-4.0"
+
+[[annotations]]
+path = "doc/configtables/**"
+precedence = "aggregate"
+SPDX-FileCopyrightText = "The PyPSA-Earth and PyPSA-Eur Authors"
+SPDX-License-Identifier = "CC-BY-4.0"
+
+[[annotations]]
+path = "data/**"
+precedence = "aggregate"
+SPDX-FileCopyrightText = "The PyPSA-Earth and PyPSA-Eur Authors"
+SPDX-License-Identifier = "CC-BY-4.0"
+
+[[annotations]]
+path = "test/utils/agg_p_nom_minmax.csv"
+precedence = "aggregate"
+SPDX-FileCopyrightText = "The PyPSA-Earth and PyPSA-Eur Authors"
+SPDX-License-Identifier = "CC-BY-4.0"
+
+[[annotations]]
+path = "data/agg_p_nom_minmax.csv"
+precedence = "aggregate"
+SPDX-FileCopyrightText = "The PyPSA-Earth and PyPSA-Eur Authors"
+SPDX-License-Identifier = "CC-BY-4.0"
+
+[[annotations]]
+path = ".github/**"
+precedence = "aggregate"
+SPDX-FileCopyrightText = "The PyPSA-Earth and PyPSA-Eur Authors"
+SPDX-License-Identifier = "CC0-1.0"
+
+[[annotations]]
+path = "doc/assets/images/**"
+precedence = "aggregate"
+SPDX-FileCopyrightText = "The PyPSA-Earth and PyPSA-Eur Authors"
+SPDX-License-Identifier = "CC-BY-4.0"
+
+[[annotations]]
+path = "doc/assets/scripts/**"
+precedence = "aggregate"
+SPDX-FileCopyrightText = "The PyPSA-Earth and PyPSA-Eur Authors"
+SPDX-License-Identifier = "AGPL-3.0-or-later"
+
+# --- PyPSA-Türkiye additions (later annotations take precedence) ---
+
+[[annotations]]
+path = ["data/costs.csv", "data/hydro_capacities.csv"]
+precedence = "aggregate"
+SPDX-FileCopyrightText = ["The PyPSA-Earth and PyPSA-Eur Authors", "2026 The PyPSA-Türkiye Authors"]
+SPDX-License-Identifier = "CC-BY-4.0"
+
+[[annotations]]
+path = ["data/custom_powerplants.csv", "data/agg_p_nom_minmax.csv", "data/agg_p_nom_minmax_trajectory.csv", "data/agg_p_nom_minmax_accel.csv"]
+precedence = "aggregate"
+SPDX-FileCopyrightText = "2026 The PyPSA-Türkiye Authors"
+SPDX-License-Identifier = "CC-BY-4.0"
+
+[[annotations]]
+path = ["config.turkey.yaml", "senaryolar/**"]
+precedence = "aggregate"
+SPDX-FileCopyrightText = "2026 The PyPSA-Türkiye Authors"
+SPDX-License-Identifier = "AGPL-3.0-or-later"
+
+[[annotations]]
+path = [".zenodo.json"]
+precedence = "aggregate"
+SPDX-FileCopyrightText = "2026 The PyPSA-Türkiye Authors"
+SPDX-License-Identifier = "CC0-1.0"
+

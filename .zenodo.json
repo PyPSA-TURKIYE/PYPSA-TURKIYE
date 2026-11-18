@@ -1,0 +1,49 @@
+{
+  "title": "PyPSA-Türkiye: an open-source energy system model of the Turkish power system",
+  "upload_type": "software",
+  "version": "1.0.0",
+  "description": "<p>PyPSA-Türkiye is an open-source, network-resolved energy system model of the Turkish power system. It co-optimizes generation, storage and transmission investment together with hourly operation over a full year and is parameterized from official national statistics (EPDK, EPİAŞ, TEİAŞ, TurkStat) combined with open geospatial and reanalysis data. The release contains configurations for 7, 22, 50 and 81 clustered nodes, five policy scenarios (REF, NDC2030, HIGHRES, NETZERO2053, NOFOSSIL) and a 2023 dispatch backcast.</p><p>PyPSA-Türkiye is a fork of PyPSA-Earth (https://github.com/pypsa-meets-earth/pypsa-earth); upstream copyright and licence notices are retained.</p>",
+  "creators": [
+    {
+      "name": "Kıraç, Abdurrahman",
+      "affiliation": "Department of Energy Systems Engineering, Erciyes University",
+      "orcid": "0009-0003-2843-5946"
+    },
+    {
+      "name": "Selçuklu, Saltuk Buğra",
+      "affiliation": "Department of Energy Systems Engineering, Erciyes University",
+      "orcid": "0000-0002-9295-3866"
+    }
+  ],
+  "license": "AGPL-3.0-or-later",
+  "access_right": "open",
+  "keywords": [
+    "energy system modelling",
+    "PyPSA",
+    "PyPSA-Earth",
+    "power system",
+    "capacity expansion",
+    "transmission expansion",
+    "spatial resolution",
+    "model validation",
+    "Türkiye"
+  ],
+  "related_identifiers": [
+    {
+      "identifier": "https://github.com/pypsa-meets-earth/pypsa-earth",
+      "relation": "isDerivedFrom",
+      "resource_type": "software"
+    },
+    {
+      "identifier": "10.1016/j.apenergy.2023.121096",
+      "relation": "references",
+      "resource_type": "publication-article"
+    },
+    {
+      "identifier": "10.5334/jors.188",
+      "relation": "references",
+      "resource_type": "publication-article"
+    }
+  ],
+  "notes": "Funding: TÜBİTAK ARDEB 3501, Grant No. 222M440; Erciyes University BAP project 15903."
+}
