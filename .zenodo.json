@@ -1,7 +1,7 @@
 {
   "title": "PyPSA-Türkiye: an open-source energy system model of the Turkish power system",
   "upload_type": "software",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "<p>PyPSA-Türkiye is an open-source, network-resolved energy system model of the Turkish power system. It co-optimizes generation, storage and transmission investment together with hourly operation over a full year and is parameterized from official national statistics (EPDK, EPİAŞ, TEİAŞ, TurkStat) combined with open geospatial and reanalysis data. The release contains configurations for 7, 22, 50 and 81 clustered nodes, five policy scenarios (REF, NDC2030, HIGHRES, NETZERO2053, NOFOSSIL) and a 2023 dispatch backcast.</p><p>PyPSA-Türkiye is a fork of PyPSA-Earth (https://github.com/pypsa-meets-earth/pypsa-earth); upstream copyright and licence notices are retained.</p>",
   "creators": [
     {

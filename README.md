@@ -6,8 +6,7 @@ SPDX-License-Identifier: CC-BY-4.0
 
 # PyPSA-Türkiye
 
-<!-- Zenodo DOI badge: replace XXXXXXX after the first GitHub release is archived by Zenodo -->
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.XXXXXXX.svg)](https://doi.org/10.5281/zenodo.XXXXXXX)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.24344886.svg)](https://doi.org/10.5281/zenodo.24344886)
 [![License: AGPL-3.0-or-later](https://img.shields.io/badge/License-AGPL--3.0--or--later-blue.svg)](LICENSES/AGPL-3.0-or-later.txt)
 
 **PyPSA-Türkiye** is an open-source, network-resolved energy system model of the
@@ -69,11 +68,13 @@ Several in-code comments and log messages in the Türkiye-specific scripts are i
 
 ## Installation
 
-Tested on Linux (Ubuntu / WSL2) with Python 3.12 and:
+The 20 published scenario runs were solved on Linux with **Python 3.11** and
+**Gurobi 12.0.3**. The workflow has also been tested on Ubuntu / WSL2 with
+Python 3.12 and Gurobi 13.0.1. Package versions:
 
 * `pypsa` 0.30.3, `linopy` 0.6.4, `snakemake` 7.32.4, `atlite` 0.5.0
-* solver: **Gurobi 13.0.1** (used for the published runs; requires a licence, free
-  academic licences are available) or **HiGHS** (`highspy` 1.13.1, open source)
+* solver: **Gurobi** (requires a licence; free academic licences are available)
+  or **HiGHS** (`highspy` 1.13.1, open source)
 
 ```bash
 git clone https://github.com/PyPSA-TURKIYE/PYPSA-TURKIYE.git
@@ -81,7 +82,7 @@ cd PYPSA-TURKIYE
 conda env create -f envs/environment.yaml      # or envs/linux-64.lock.yaml
 conda activate pypsa-earth
 pip install pypsa==0.30.3 linopy==0.6.4        # pin the versions used for the paper
-pip install gurobipy==13.0.1                   # optional, needs a Gurobi licence
+pip install gurobipy==12.0.3                   # optional, needs a Gurobi licence
 cp config.turkey.yaml config.yaml
 ```
 
@@ -185,6 +186,8 @@ If you use PyPSA-Türkiye, please cite the model paper and the frameworks it bui
 
 * Kıraç, A., Selçuklu, S. B. *PyPSA-Türkiye: An open-source energy system model for
   planning Türkiye's sustainable energy transition.* Submitted to Applied Energy, 2026.
+* Kıraç, A., Selçuklu, S. B. (2026). PyPSA-Türkiye (software). Zenodo.
+  https://doi.org/10.5281/zenodo.24344886
 * Parzen, M., et al. (2023). PyPSA-Earth. A new global open energy system optimization
   model demonstrated in Africa. *Applied Energy*, 341, 121096.
   https://doi.org/10.1016/j.apenergy.2023.121096

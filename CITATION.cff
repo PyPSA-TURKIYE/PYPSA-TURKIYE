@@ -12,8 +12,8 @@ abstract: >-
   configurations for 7, 22, 50 and 81 clustered nodes, five policy scenarios and
   a 2023 dispatch backcast.
 type: software
-version: 1.0.0
-date-released: "2026-11-18"
+version: 1.0.1
+date-released: "2026-11-20"
 license: AGPL-3.0-or-later
 repository-code: "https://github.com/PyPSA-TURKIYE/PYPSA-TURKIYE"
 keywords:
